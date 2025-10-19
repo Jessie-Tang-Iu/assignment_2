@@ -181,109 +181,86 @@ public class ManageComputers {
     // data values and replace old
     // attribute values in object being edited using object setter methods
     private static void editComputer(ArrayList<Computer> computers, Scanner s) {
-        int computerListNumberToEdit = 0;
-        String computerType = "";
-        Computer tempComputer = null;
-
         System.out.println("EDIT COMPUTER:-");
 
         System.out.print("Enter number of computer to edit:");
-        computerListNumberToEdit = Integer.parseInt(s.nextLine());
+        int computerListNumberToEdit = Integer.parseInt(s.nextLine());
 
-        // Check that computerListNumberToEdit is valid first
-        if (computerListNumberToEdit >= 1 && computerListNumberToEdit <= computers.size()) {
-
-            // Determine exact type of computer being edited
-            // Subtract 1 to get ArrayList index from on-screen list number
-            if (computers.get(computerListNumberToEdit - 1) instanceof Laptop) {
-                computerType = "laptop";
-            }
-            // Subtract 1 to get ArrayList index from on-screen list number
-            else if (computers.get(computerListNumberToEdit - 1) instanceof Desktop) {
-                computerType = "desktop";
-            }
-
-            // Edit computer
-            switch (computerType) {
-
-                // Editing a laptop
-                case "laptop":
-
-                    System.out.println("Editing a Laptop:");
-
-                    // Get CPU, RAM and Disk info, store in temporary Computer-type object
-                    tempComputer = getComputerData(s);
-
-                    System.out.print("Enter screen size:");
-                    String screenSize = s.nextLine();
-
-                    // // Get reference to the object in ArrayList<Computer> to edit
-                    // Cast Computer to Laptop for setScreenSize call a few lines of code later
-                    // Laptop laptopToEdit = (Laptop) computers.get(computerListNumberToEdit - 1);
-
-                    // // Use setter methods to change mutable object state
-                    // laptopToEdit.setCPU(tempComputer.getCPU());
-                    // laptopToEdit.setRAM(tempComputer.getRAM());
-                    // laptopToEdit.setDisk(tempComputer.getDisk());
-                    // laptopToEdit.setScreenSize(screenSize);
-
-                    // Create a new immutable Laptop object with new data
-                    Laptop newLaptop = new Laptop(
-                            tempComputer.getCPU(),
-                            tempComputer.getRAM(),
-                            tempComputer.getDisk(),
-                            screenSize);
-
-                    // Replace the old object in ArrayList with the new one
-                    computers.set(computerListNumberToEdit - 1, newLaptop);
-
-                    System.out.println("Laptop updated successfully.");
-
-                    break;
-
-                // Editing a desktop, store in temporary Computer-type object
-                case "desktop":
-
-                    System.out.println("Editing a Desktop:");
-
-                    // Get CPU, RAM and Disk info
-                    tempComputer = getComputerData(s);
-
-                    System.out.print("Enter GPU:");
-                    String GPUType = s.nextLine();
-
-                    // // Get reference to the object in ArrayList<Computer> to edit
-                    // Cast Computer to Laptop for setScreenSize call a few lines of code later
-                    // Desktop desktopToEdit = (Desktop) computers.get(computerListNumberToEdit -
-                    // 1);
-
-                    // // Use setter methods to change mutable object state
-                    // desktopToEdit.setCPU(tempComputer.getCPU());
-                    // desktopToEdit.setRAM(tempComputer.getRAM());
-                    // desktopToEdit.setDisk(tempComputer.getDisk());
-                    // desktopToEdit.setGPUType(GPUType);
-
-                    // Create a new immutable Desktop object with new data
-                    Desktop newDesktop = new Desktop(
-                            tempComputer.getCPU(),
-                            tempComputer.getRAM(),
-                            tempComputer.getDisk(),
-                            GPUType);
-
-                    // Replace the old object in ArrayList with the new one
-                    computers.set(computerListNumberToEdit - 1, newDesktop);
-
-                    System.out.println("Desktop updated successfully.");
-
-                    break;
-
-            }
-
-        } else {
+        if (computerListNumberToEdit < 1 || computerListNumberToEdit > computers.size()) {
             System.out.println("Invalid computer number entered!");
+            return;
         }
 
-    } // End of editComputer
+        String computerType = "";
+        Computer tempComputer = null;
+
+        // Determine exact type of computer being edited
+        // Subtract 1 to get ArrayList index from on-screen list number
+        if (computers.get(computerListNumberToEdit - 1) instanceof Laptop) {
+            computerType = "laptop";
+        }
+        // Subtract 1 to get ArrayList index from on-screen list number
+        else if (computers.get(computerListNumberToEdit - 1) instanceof Desktop) {
+            computerType = "desktop";
+        }
+
+        // Edit computer
+        switch (computerType) {
+
+            // Editing a laptop
+            case "laptop":
+
+                System.out.println("Editing a Laptop:");
+
+                // Get CPU, RAM and Disk info, store in temporary Computer-type object
+                tempComputer = getComputerData(s);
+
+                System.out.print("Enter screen size:");
+                String screenSize = s.nextLine();
+
+                // Create a new immutable Laptop object with new data
+                Laptop newLaptop = new Laptop(
+                        tempComputer.getCPU(),
+                        tempComputer.getRAM(),
+                        tempComputer.getDisk(),
+                        screenSize);
+
+                // Replace the old object in ArrayList with the new one
+                computers.set(computerListNumberToEdit - 1, newLaptop);
+
+                System.out.println("Laptop updated successfully.");
+
+                break;
+
+            // Editing a desktop, store in temporary Computer-type object
+            case "desktop":
+
+                System.out.println("Editing a Desktop:");
+
+                // Get CPU, RAM and Disk info
+                tempComputer = getComputerData(s);
+
+                System.out.print("Enter GPU:");
+                String GPUType = s.nextLine();
+
+                // Create a new immutable Desktop object with new data
+                Desktop newDesktop = new Desktop(
+                        tempComputer.getCPU(),
+                        tempComputer.getRAM(),
+                        tempComputer.getDisk(),
+                        GPUType);
+
+                // Replace the old object in ArrayList with the new one
+                computers.set(computerListNumberToEdit - 1, newDesktop);
+
+                System.out.println("Desktop updated successfully.");
+                break;
+
+            default:
+                System.out.println("Unknown computer type encountered!");
+                break;
+        }
+    }
 
     // -----------------------------
     // Helper method to get data common to Laptop and Desktop (CPU, RAM and disk)
