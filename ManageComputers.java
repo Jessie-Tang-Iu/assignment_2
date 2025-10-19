@@ -184,7 +184,13 @@ public class ManageComputers {
         System.out.println("EDIT COMPUTER:-");
 
         System.out.print("Enter number of computer to edit:");
-        int computerListNumberToEdit = Integer.parseInt(s.nextLine());
+        int computerListNumberToEdit;
+        try {
+            computerListNumberToEdit = Integer.parseInt(s.nextLine());
+        } catch (NumberFormatException e) {
+            System.out.println("Invalid input. Please enter a number.");
+            return;
+        }
 
         if (computerListNumberToEdit < 1 || computerListNumberToEdit > computers.size()) {
             System.out.println("Invalid computer number entered!");
