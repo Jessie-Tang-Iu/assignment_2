@@ -61,19 +61,29 @@ public class ManageComputers {
     private static String getMenuSelection(Scanner s) {
         String menuOption = "";
 
-        // Display menu options on-screen
-        System.out.println("----------");
-        System.out.println("A) Add Computer");
-        System.out.println("D) Delete Computer");
-        System.out.println("E) Edit Computer");
-        System.out.println("X) eXit");
-        System.out.println("----------");
+        do {
+            // Display menu options on-screen
+            System.out.println("----------");
+            System.out.println("A) Add Computer");
+            System.out.println("D) Delete Computer");
+            System.out.println("E) Edit Computer");
+            System.out.println("X) eXit");
+            System.out.println("----------");
 
-        // Get menu selection from keyboard
-        System.out.print("Enter menu selection:");
-        menuOption = s.nextLine();
+            // Get menu selection from keyboard
+            System.out.print("Enter menu selection:");
+            menuOption = s.nextLine();
 
-        menuOption = menuOption.toLowerCase(); // Make lower case for comparison purposes
+            menuOption = menuOption.toLowerCase(); // Make lower case for comparison purposes
+
+            // Whitelist validation for menu selection
+            if (!menuOption.equals("a") && !menuOption.equals("d") && 
+                !menuOption.equals("e") && !menuOption.equals("x")) {
+                System.out.println("Invalid menu selection! Please enter 'a', 'd', 'e', or 'x'.");
+            }
+
+        } while (!menuOption.equals("a") && !menuOption.equals("d") && 
+                 !menuOption.equals("e") && !menuOption.equals("x"));
 
         return menuOption;
     } // End of getMenuSelection
@@ -111,9 +121,17 @@ public class ManageComputers {
 
         System.out.println("ADDING COMPUTER:-");
 
-        System.out.println("Enter type of computer to add ('L' for Laptop, 'D' for Desktop):");
-        computerType = s.nextLine();
-        computerType = computerType.toLowerCase(); // Convert to lower case for comparison purposes
+        // Whitelist validation for computer type
+        do {
+            System.out.println("Enter type of computer to add ('L' for Laptop, 'D' for Desktop):");
+            computerType = s.nextLine();
+            computerType = computerType.toLowerCase(); // Convert to lower case for comparison purposes
+
+            if (!computerType.equals("l") && !computerType.equals("d")) {
+                System.out.println("Invalid computer type! Please enter 'L' for Laptop or 'D' for Desktop.");
+            }
+
+        } while (!computerType.equals("l") && !computerType.equals("d"));
 
         switch (computerType) {
 
@@ -123,8 +141,17 @@ public class ManageComputers {
                 // Get CPU, RAM and Disk info
                 tempComputer = getComputerData(s);
 
-                System.out.print("Enter screen size:");
-                String screenSize = s.nextLine();
+                // Validation for screen size - allows only numbers
+                String screenSize = "";
+                do {
+                    System.out.print("Enter screen size:");
+                    screenSize = s.nextLine();
+                    
+                    // Check if input contains only numbers
+                    if (!screenSize.matches("\\d+")) {
+                        System.out.println("Invalid screen size!");
+                    }
+                } while (!screenSize.matches("\\d+"));
 
                 // Add new Laptop to ArrayList in main() method
                 computers.add(
@@ -138,8 +165,16 @@ public class ManageComputers {
                 // Get CPU, RAM and Disk info
                 tempComputer = getComputerData(s);
 
-                System.out.print("Enter GPU:");
-                String GPUType = s.nextLine();
+                // Validation for GPU - allows only Nvidia and AMD
+                String GPUType = "";
+                do {
+                    System.out.print("Enter GPU:");
+                    GPUType = s.nextLine();
+                    
+                    if (!GPUType.equals("Nvidia") && !GPUType.equals("AMD")) {
+                        System.out.println("Invalid GPU!");
+                    }
+                } while (!GPUType.equals("Nvidia") && !GPUType.equals("AMD"));
 
                 // Add new Desktop to ArrayList in main() method
                 computers.add(
@@ -162,8 +197,24 @@ public class ManageComputers {
 
         System.out.println("DELETE COMPUTER:-");
 
-        System.out.print("Enter number of computer to delete:");
-        computerListNumberToDelete = Integer.parseInt(s.nextLine());
+        // Whitelist validation for computer number
+        String computerNumberInput = "";
+        do {
+            System.out.print("Enter number of computer to delete:");
+            computerNumberInput = s.nextLine();
+            
+            // Check if input is a positive integer
+            try {
+                computerListNumberToDelete = Integer.parseInt(computerNumberInput);
+                if (computerListNumberToDelete <= 0) {
+                    System.out.println("Invalid input! Please enter a positive number.");
+                    computerNumberInput = ""; // Reset to trigger loop again
+                }
+            } catch (NumberFormatException e) {
+                System.out.println("Invalid input! Please enter a valid number.");
+                computerNumberInput = ""; // Reset to trigger loop again
+            }
+        } while (computerNumberInput.isEmpty() || computerListNumberToDelete <= 0);
 
         // Check if computer list number is valid before deleting computer from list
         if (computerListNumberToDelete >= 1 && computerListNumberToDelete <= computers.size()) {
@@ -183,14 +234,25 @@ public class ManageComputers {
     private static void editComputer(ArrayList<Computer> computers, Scanner s) {
         System.out.println("EDIT COMPUTER:-");
 
-        System.out.print("Enter number of computer to edit:");
-        int computerListNumberToEdit;
-        try {
-            computerListNumberToEdit = Integer.parseInt(s.nextLine());
-        } catch (NumberFormatException e) {
-            System.out.println("Invalid input. Please enter a number.");
-            return;
-        }
+        // Whitelist validation for computer number
+        String computerNumberInput = "";
+        int computerListNumberToEdit = 0;
+        do {
+            System.out.print("Enter number of computer to edit:");
+            computerNumberInput = s.nextLine();
+            
+            // Check if input is a positive integer
+            try {
+                computerListNumberToEdit = Integer.parseInt(computerNumberInput);
+                if (computerListNumberToEdit <= 0) {
+                    System.out.println("Invalid input! Please enter a positive number.");
+                    computerNumberInput = ""; // Reset to trigger loop again
+                }
+            } catch (NumberFormatException e) {
+                System.out.println("Invalid input! Please enter a valid number.");
+                computerNumberInput = ""; // Reset to trigger loop again
+            }
+        } while (computerNumberInput.isEmpty() || computerListNumberToEdit <= 0);
 
         if (computerListNumberToEdit < 1 || computerListNumberToEdit > computers.size()) {
             System.out.println("Invalid computer number entered!");
@@ -221,8 +283,17 @@ public class ManageComputers {
                 // Get CPU, RAM and Disk info, store in temporary Computer-type object
                 tempComputer = getComputerData(s);
 
-                System.out.print("Enter screen size:");
-                String screenSize = s.nextLine();
+                // Validation for screen size - allows only numbers
+                String screenSize = "";
+                do {
+                    System.out.print("Enter screen size:");
+                    screenSize = s.nextLine();
+                    
+                    // Check if input contains only numbers
+                    if (!screenSize.matches("\\d+")) {
+                        System.out.println("Invalid screen size!");
+                    }
+                } while (!screenSize.matches("\\d+"));
 
                 // Create a new immutable Laptop object with new data
                 Laptop newLaptop = new Laptop(
@@ -246,8 +317,16 @@ public class ManageComputers {
                 // Get CPU, RAM and Disk info
                 tempComputer = getComputerData(s);
 
-                System.out.print("Enter GPU:");
-                String GPUType = s.nextLine();
+                // Validation for GPU - allows only Nvidia and AMD
+                String GPUType = "";
+                do {
+                    System.out.print("Enter GPU:");
+                    GPUType = s.nextLine();
+                    
+                    if (!GPUType.equals("Nvidia") && !GPUType.equals("AMD")) {
+                        System.out.println("Invalid GPU!");
+                    }
+                } while (!GPUType.equals("Nvidia") && !GPUType.equals("AMD"));
 
                 // Create a new immutable Desktop object with new data
                 Desktop newDesktop = new Desktop(
@@ -277,14 +356,66 @@ public class ManageComputers {
         String RAM = "";
         String disk = "";
 
-        System.out.print("Enter CPU:");
-        CPU = s.nextLine();
+        // Whitelist validation for CPU - allows both full names and model numbers
+        do {
+            System.out.print("Enter CPU:");
+            CPU = s.nextLine();
+            
+            // Check for valid CPU models (both full names and model numbers)
+            boolean isValidCPU = CPU.equals("Intel Core i3") || CPU.equals("Intel Core i5") || 
+                               CPU.equals("Intel Core i7") || CPU.equals("Intel Core i9") || 
+                               CPU.equals("Intel Pentium") || CPU.equals("Intel Celeron") || 
+                               CPU.equals("Intel Xeon") || CPU.equals("AMD Ryzen 3") || 
+                               CPU.equals("AMD Ryzen 5") || CPU.equals("AMD Ryzen 7") || 
+                               CPU.equals("AMD Ryzen 9") || CPU.equals("AMD Athlon") || 
+                               CPU.equals("AMD FX") || CPU.equals("Apple M1") || 
+                               CPU.equals("Apple M2") || CPU.equals("Apple M3") ||
+                               // Model numbers only
+                               CPU.equals("i3") || CPU.equals("i5") || CPU.equals("i7") || CPU.equals("i9") ||
+                               CPU.equals("Ryzen 3") || CPU.equals("Ryzen 5") || CPU.equals("Ryzen 7") || CPU.equals("Ryzen 9") ||
+                               CPU.equals("M1") || CPU.equals("M2") || CPU.equals("M3") ||
+                               CPU.equals("Pentium") || CPU.equals("Celeron") || CPU.equals("Xeon") ||
+                               CPU.equals("Athlon") || CPU.equals("FX");
+            
+            if (!isValidCPU) {
+                System.out.println("Invalid CPU!");
+            }
+        } while (!(CPU.equals("Intel Core i3") || CPU.equals("Intel Core i5") || 
+                  CPU.equals("Intel Core i7") || CPU.equals("Intel Core i9") || 
+                  CPU.equals("Intel Pentium") || CPU.equals("Intel Celeron") || 
+                  CPU.equals("Intel Xeon") || CPU.equals("AMD Ryzen 3") || 
+                  CPU.equals("AMD Ryzen 5") || CPU.equals("AMD Ryzen 7") || 
+                  CPU.equals("AMD Ryzen 9") || CPU.equals("AMD Athlon") || 
+                  CPU.equals("AMD FX") || CPU.equals("Apple M1") || 
+                  CPU.equals("Apple M2") || CPU.equals("Apple M3") ||
+                  // Model numbers only
+                  CPU.equals("i3") || CPU.equals("i5") || CPU.equals("i7") || CPU.equals("i9") ||
+                  CPU.equals("Ryzen 3") || CPU.equals("Ryzen 5") || CPU.equals("Ryzen 7") || CPU.equals("Ryzen 9") ||
+                  CPU.equals("M1") || CPU.equals("M2") || CPU.equals("M3") ||
+                  CPU.equals("Pentium") || CPU.equals("Celeron") || CPU.equals("Xeon") ||
+                  CPU.equals("Athlon") || CPU.equals("FX")));
 
-        System.out.print("Enter RAM:");
-        RAM = s.nextLine();
+        // Validation for RAM - allows only numbers
+        do {
+            System.out.print("Enter RAM:");
+            RAM = s.nextLine();
+            
+            // Check if input contains only numbers
+            if (!RAM.matches("\\d+")) {
+                System.out.println("Invalid RAM!");
+            }
+        } while (!RAM.matches("\\d+"));
 
-        System.out.print("Enter Disk:");
-        disk = s.nextLine();
+        // Validation for Disk - allows only numbers
+        do {
+            System.out.print("Enter Disk:");
+            disk = s.nextLine();
+            
+            // Check if input contains only numbers
+            if (!disk.matches("\\d+")) {
+                System.out.println("Invalid Disk!");
+            }
+        } while (!disk.matches("\\d+"));
 
         return new Computer(CPU, RAM, disk);
 
