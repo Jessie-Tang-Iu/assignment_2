@@ -1,9 +1,9 @@
 //Computer class: manages computer CPU, RAM and Disk information
 
 public class Computer {
-    String CPU=null;
-    String RAM=null;
-    String disk=null;
+    private String CPU=null;
+    private String RAM=null;
+    private String disk=null;
 
     //Constructors
     public Computer() {} //No-arg contructor
