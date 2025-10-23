@@ -12,7 +12,6 @@ public class ManageComputers {
         //ArrayList are Computer, not Laptop or Desktop, but since those are subclasses of Computer they can be
         //stored in an ArrayLiust<Computer> anyway.
 
-
         // One ArrayList to hold all computer objects (Laptop or Desktop)
         ArrayList<Object> computers = new ArrayList<>();
 
