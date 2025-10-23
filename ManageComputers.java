@@ -7,20 +7,20 @@ import java.util.Scanner;
 public class ManageComputers {
 
     public static void main(String args[]) {
+        
+         //This ArrayList will hold all the computers in the system. Note that the type of objects expected in this
+        //ArrayList are Computer, not Laptop or Desktop, but since those are subclasses of Computer they can be
+        //stored in an ArrayLiust<Computer> anyway.
 
-        // This ArrayList will hold all the computers in the system. Note that the type
-        // of objects expected in this
-        // ArrayList are Computer, not Laptop or Desktop, but since those are subclasses
-        // of Computer they can be
-        // stored in an ArrayLiust<Computer> anyway.
-        ArrayList<Computer> computers = new ArrayList<Computer>();
+        // One ArrayList to hold all computer objects (Laptop or Desktop)
+        ArrayList<Object> computers = new ArrayList<>();
 
         Scanner s = new Scanner(System.in);
         String menuOption = "";
 
         do { // Start of main program loop
 
-            // Show computer data in ArrayList<Computer>
+            //Show computer data in ArrayList<Object>
             showComputers(computers);
 
             // Display menu and return menu option selected by the user
@@ -29,396 +29,235 @@ public class ManageComputers {
             switch (menuOption) {
                 // Add new computer
                 case "a":
-
                     addComputer(computers, s);
-
                     break;
 
                 // Delete a computer
                 case "d":
-
                     deleteComputer(computers, s);
-
                     break;
 
                 // Edit a computer
                 case "e":
-
                     editComputer(computers, s);
-
                     break;
-
             }
 
         } while (!menuOption.equals("x")); // Stop when "x" is entered
 
         s.close(); // Close keyboard scanner
-
-    } // End of main
+    }
 
     // -----------------------------
-    // Display menu and get user selection, return it
+    //Display menu and get user selection, return it
     private static String getMenuSelection(Scanner s) {
-        String menuOption = "";
+        String menuOption="";
 
-        do {
-            // Display menu options on-screen
-            System.out.println("----------");
-            System.out.println("A) Add Computer");
-            System.out.println("D) Delete Computer");
-            System.out.println("E) Edit Computer");
-            System.out.println("X) eXit");
-            System.out.println("----------");
+        //Display menu options on-screen
+        System.out.println("----------");
+        System.out.println("A) Add Computer");
+        System.out.println("D) Delete Computer");
+        System.out.println("E) Edit Computer");
+        System.out.println("X) eXit");
+        System.out.println("----------");
 
-            // Get menu selection from keyboard
-            System.out.print("Enter menu selection:");
-            menuOption = s.nextLine();
+        //Get menu selection from keyboard
+        System.out.print("Enter menu selection:");
+        menuOption = s.nextLine();
 
-            menuOption = menuOption.toLowerCase(); // Make lower case for comparison purposes
-
-            // Whitelist validation for menu selection
-            if (!menuOption.equals("a") && !menuOption.equals("d") && 
-                !menuOption.equals("e") && !menuOption.equals("x")) {
-                System.out.println("Invalid menu selection! Please enter 'a', 'd', 'e', or 'x'.");
-            }
-
-        } while (!menuOption.equals("a") && !menuOption.equals("d") && 
-                 !menuOption.equals("e") && !menuOption.equals("x"));
+        menuOption = menuOption.toLowerCase(); //Make lower case for comparison purposes
 
         return menuOption;
-    } // End of getMenuSelection
+    } //End of getMenuSelection
 
     // -----------------------------
-    // Show data for all laptops and desktops stored in ArrayList<Computer> create
-    // in main() method
-    private static void showComputers(ArrayList<Computer> computers) {
-        int computerListNumber = 0; // This variable is used to hold the "list number" for each computer, starting
-                                    // at 1.
+    // Show all laptops and desktops
+    private static void showComputers(ArrayList<Object> computers) {
+        int computerListNumber=0; //This variable is used to hold the "list number" for each computer, starting at 1.
 
         System.out.println("=========");
 
         System.out.println("LIST OF COMPUTERS:-");
 
-        for (Computer c : computers) {
+        for (Object c: computers) {
 
-            computerListNumber++; // Increment list number for each computer
+            computerListNumber++; //Increment list number for each computer
 
-            // Call overridden toString() method for current object to get and display its
-            // data
+            //Call overridden toString() method for current object to get and display its data
             System.out.println(computerListNumber + ": " + c.toString());
         }
 
         System.out.println("=========");
 
-    } // End of showComputers
+    } //End of showComputers
 
     // -----------------------------
-    // Add a new Laptop or Desktop computer to the ArrayList<Computer>
-    private static void addComputer(ArrayList<Computer> computers, Scanner s) {
-        String computerType = "";
+    // Add a new Laptop or Desktop
 
-        Computer tempComputer = null;
+     private static void addComputer(ArrayList<Object> computers, Scanner s) {
+        String computerType="";
+
+        Computer tempComputer=null;
 
         System.out.println("ADDING COMPUTER:-");
 
-        // Whitelist validation for computer type
-        do {
-            System.out.println("Enter type of computer to add ('L' for Laptop, 'D' for Desktop):");
-            computerType = s.nextLine();
-            computerType = computerType.toLowerCase(); // Convert to lower case for comparison purposes
+        System.out.println("Enter type of computer to add ('L' for Laptop, 'D' for Desktop):");
+        computerType=s.nextLine();
+        computerType=computerType.toLowerCase(); //Convert to lower case for comparison purposes
 
-            if (!computerType.equals("l") && !computerType.equals("d")) {
-                System.out.println("Invalid computer type! Please enter 'L' for Laptop or 'D' for Desktop.");
-            }
+        switch(computerType) {
 
-        } while (!computerType.equals("l") && !computerType.equals("d"));
+            //Add a laptop
+            case "l": 
 
-        switch (computerType) {
+                //Get CPU, RAM and Disk info
+                tempComputer = getComputerData(s); 
 
-            // Add a laptop
-            case "l":
+                System.out.print("Enter screen size:");
+                String screenSize = s.nextLine();
 
-                // Get CPU, RAM and Disk info
-                tempComputer = getComputerData(s);
+                //Add new Laptop to ArrayList in main() method
+                computers.add(new Laptop(tempComputer.getCPU(),tempComputer.getRAM(),tempComputer.getDisk(),screenSize)); 
 
-                // Validation for screen size - allows only numbers
-                String screenSize = "";
-                do {
-                    System.out.print("Enter screen size:");
-                    screenSize = s.nextLine();
-                    
-                    // Check if input contains only numbers
-                    if (!screenSize.matches("\\d+")) {
-                        System.out.println("Invalid screen size!");
-                    }
-                } while (!screenSize.matches("\\d+"));
+                break;
+            
+            //Add a desktop    
+            case "d": 
 
-                // Add new Laptop to ArrayList in main() method
-                computers.add(
-                        new Laptop(tempComputer.getCPU(), tempComputer.getRAM(), tempComputer.getDisk(), screenSize));
+            //Get CPU, RAM and Disk info
+                tempComputer = getComputerData(s); 
+
+                System.out.print("Enter GPU:");
+                String GPUType = s.nextLine();
+
+                //Add new Desktop to ArrayList in main() method
+                computers.add(new Desktop(tempComputer.getCPU(),tempComputer.getRAM(),tempComputer.getDisk(),GPUType)); 
 
                 break;
 
-            // Add a desktop
-            case "d":
-
-                // Get CPU, RAM and Disk info
-                tempComputer = getComputerData(s);
-
-                // Validation for GPU - allows only Nvidia and AMD
-                String GPUType = "";
-                do {
-                    System.out.print("Enter GPU:");
-                    GPUType = s.nextLine();
-                    
-                    if (!GPUType.equals("Nvidia") && !GPUType.equals("AMD")) {
-                        System.out.println("Invalid GPU!");
-                    }
-                } while (!GPUType.equals("Nvidia") && !GPUType.equals("AMD"));
-
-                // Add new Desktop to ArrayList in main() method
-                computers.add(
-                        new Desktop(tempComputer.getCPU(), tempComputer.getRAM(), tempComputer.getDisk(), GPUType));
-
-                break;
-
-            // Invalid computer type to add entered
+            //Invalid computer type to add entered
             default:
 
                 System.out.println("Invalid computer type entered!");
 
         }
-    } // End of addComputer
+    } //End of addComputer
+
 
     // -----------------------------
-    // Delete a specified computer from the ArrayList
-    private static void deleteComputer(ArrayList<Computer> computers, Scanner s) {
-        int computerListNumberToDelete = 0;
+    // Delete a specified computer
+   //Delete a specified computer from the ArrayList
+    private static void deleteComputer(ArrayList<Object> computers, Scanner s) {
+        int computerListNumberToDelete=0;
 
         System.out.println("DELETE COMPUTER:-");
 
-        // Whitelist validation for computer number
-        String computerNumberInput = "";
-        do {
-            System.out.print("Enter number of computer to delete:");
-            computerNumberInput = s.nextLine();
-            
-            // Check if input is a positive integer
-            try {
-                computerListNumberToDelete = Integer.parseInt(computerNumberInput);
-                if (computerListNumberToDelete <= 0) {
-                    System.out.println("Invalid input! Please enter a positive number.");
-                    computerNumberInput = ""; // Reset to trigger loop again
-                }
-            } catch (NumberFormatException e) {
-                System.out.println("Invalid input! Please enter a valid number.");
-                computerNumberInput = ""; // Reset to trigger loop again
-            }
-        } while (computerNumberInput.isEmpty() || computerListNumberToDelete <= 0);
+        System.out.print("Enter number of computer to delete:");
+        computerListNumberToDelete = Integer.parseInt(s.nextLine());
 
-        // Check if computer list number is valid before deleting computer from list
-        if (computerListNumberToDelete >= 1 && computerListNumberToDelete <= computers.size()) {
-            // Subtract 1 to get ArrayList index from on-screen list number to create
-            // correct index in ArrayList to delete
-            computers.remove(computerListNumberToDelete - 1);
-        } else {
+        //Check if computer list number is valid before deleting computer from list
+        if (computerListNumberToDelete>=1 && computerListNumberToDelete<=computers.size()) {
+            //Subtract 1 to get ArrayList index from on-screen list number to create correct index in ArrayList to delete
+            computers.remove(computerListNumberToDelete-1); 
+        }   
+        else {
             System.out.println("Invalid computer number entered!");
         }
 
-    } // End of deleteComputer
+    } //End of deleteComputer
 
     // -----------------------------
-    // Edit a computer. Since Laptop and Desktop are mutable classses/object get new
-    // data values and replace old
-    // attribute values in object being edited using object setter methods
-    private static void editComputer(ArrayList<Computer> computers, Scanner s) {
-        System.out.println("EDIT COMPUTER:-");
+    //Edit a computer. Since Laptop and Desktop are mutable classses/object get new data values and replace old
+    //attribute values in object being edited using object setter methods
+    private static void editComputer(ArrayList<Object> computers, Scanner s) {
+    int computerListNumberToEdit = 0;
+    String computerType = "";
+    Computer tempComputer = null;
 
-        // Whitelist validation for computer number
-        String computerNumberInput = "";
-        int computerListNumberToEdit = 0;
-        do {
-            System.out.print("Enter number of computer to edit:");
-            computerNumberInput = s.nextLine();
-            
-            // Check if input is a positive integer
-            try {
-                computerListNumberToEdit = Integer.parseInt(computerNumberInput);
-                if (computerListNumberToEdit <= 0) {
-                    System.out.println("Invalid input! Please enter a positive number.");
-                    computerNumberInput = ""; // Reset to trigger loop again
-                }
-            } catch (NumberFormatException e) {
-                System.out.println("Invalid input! Please enter a valid number.");
-                computerNumberInput = ""; // Reset to trigger loop again
-            }
-        } while (computerNumberInput.isEmpty() || computerListNumberToEdit <= 0);
+    System.out.println("EDIT COMPUTER:-");
 
-        if (computerListNumberToEdit < 1 || computerListNumberToEdit > computers.size()) {
-            System.out.println("Invalid computer number entered!");
-            return;
-        }
+    System.out.print("Enter number of computer to edit:");
+    computerListNumberToEdit = Integer.parseInt(s.nextLine());
 
-        String computerType = "";
-        Computer tempComputer = null;
+    // Check that computerListNumberToEdit is valid first
+    if (computerListNumberToEdit >= 1 && computerListNumberToEdit <= computers.size()) {
 
         // Determine exact type of computer being edited
-        // Subtract 1 to get ArrayList index from on-screen list number
-        if (computers.get(computerListNumberToEdit - 1) instanceof Laptop) {
+        Object obj = computers.get(computerListNumberToEdit - 1);
+        if (obj instanceof Laptop) {
             computerType = "laptop";
-        }
-        // Subtract 1 to get ArrayList index from on-screen list number
-        else if (computers.get(computerListNumberToEdit - 1) instanceof Desktop) {
+        } else if (obj instanceof Desktop) {
             computerType = "desktop";
         }
 
-        // Edit computer
         switch (computerType) {
 
-            // Editing a laptop
             case "laptop":
-
                 System.out.println("Editing a Laptop:");
 
-                // Get CPU, RAM and Disk info, store in temporary Computer-type object
+                // Get new CPU, RAM, Disk info
                 tempComputer = getComputerData(s);
 
-                // Validation for screen size - allows only numbers
-                String screenSize = "";
-                do {
-                    System.out.print("Enter screen size:");
-                    screenSize = s.nextLine();
-                    
-                    // Check if input contains only numbers
-                    if (!screenSize.matches("\\d+")) {
-                        System.out.println("Invalid screen size!");
-                    }
-                } while (!screenSize.matches("\\d+"));
+                System.out.print("Enter screen size:");
+                String screenSize = s.nextLine();
 
-                // Create a new immutable Laptop object with new data
-                Laptop newLaptop = new Laptop(
+                // Create a new Laptop object with updated info
+                Laptop updatedLaptop = new Laptop(
                         tempComputer.getCPU(),
                         tempComputer.getRAM(),
                         tempComputer.getDisk(),
                         screenSize);
 
-                // Replace the old object in ArrayList with the new one
-                computers.set(computerListNumberToEdit - 1, newLaptop);
-
+                // Replace old object in ArrayList
+                computers.set(computerListNumberToEdit - 1, updatedLaptop);
                 System.out.println("Laptop updated successfully.");
-
                 break;
 
-            // Editing a desktop, store in temporary Computer-type object
             case "desktop":
-
                 System.out.println("Editing a Desktop:");
 
-                // Get CPU, RAM and Disk info
+                // Get new CPU, RAM, Disk info
                 tempComputer = getComputerData(s);
 
-                // Validation for GPU - allows only Nvidia and AMD
-                String GPUType = "";
-                do {
-                    System.out.print("Enter GPU:");
-                    GPUType = s.nextLine();
-                    
-                    if (!GPUType.equals("Nvidia") && !GPUType.equals("AMD")) {
-                        System.out.println("Invalid GPU!");
-                    }
-                } while (!GPUType.equals("Nvidia") && !GPUType.equals("AMD"));
+                System.out.print("Enter GPU:");
+                String GPUType = s.nextLine();
 
-                // Create a new immutable Desktop object with new data
-                Desktop newDesktop = new Desktop(
+                // Create a new Desktop object with updated info
+                Desktop updatedDesktop = new Desktop(
                         tempComputer.getCPU(),
                         tempComputer.getRAM(),
                         tempComputer.getDisk(),
                         GPUType);
 
-                // Replace the old object in ArrayList with the new one
-                computers.set(computerListNumberToEdit - 1, newDesktop);
-
+                // Replace old object in ArrayList
+                computers.set(computerListNumberToEdit - 1, updatedDesktop);
                 System.out.println("Desktop updated successfully.");
                 break;
-
-            default:
-                System.out.println("Unknown computer type encountered!");
-                break;
         }
+
+    } else {
+        System.out.println("Invalid computer number entered!");
     }
+}
+//End of editComputer
 
     // -----------------------------
-    // Helper method to get data common to Laptop and Desktop (CPU, RAM and disk)
-    // objects. Returns a Computer-type object
-    // holding these values as attribues
+    // Helper to get CPU, RAM, Disk info
     private static Computer getComputerData(Scanner s) {
-        String CPU = "";
-        String RAM = "";
-        String disk = "";
+        String CPU="";
+        String RAM="";
+        String disk="";
 
-        // Whitelist validation for CPU - allows both full names and model numbers
-        do {
-            System.out.print("Enter CPU:");
-            CPU = s.nextLine();
-            
-            // Check for valid CPU models (both full names and model numbers)
-            boolean isValidCPU = CPU.equals("Intel Core i3") || CPU.equals("Intel Core i5") || 
-                               CPU.equals("Intel Core i7") || CPU.equals("Intel Core i9") || 
-                               CPU.equals("Intel Pentium") || CPU.equals("Intel Celeron") || 
-                               CPU.equals("Intel Xeon") || CPU.equals("AMD Ryzen 3") || 
-                               CPU.equals("AMD Ryzen 5") || CPU.equals("AMD Ryzen 7") || 
-                               CPU.equals("AMD Ryzen 9") || CPU.equals("AMD Athlon") || 
-                               CPU.equals("AMD FX") || CPU.equals("Apple M1") || 
-                               CPU.equals("Apple M2") || CPU.equals("Apple M3") ||
-                               // Model numbers only
-                               CPU.equals("i3") || CPU.equals("i5") || CPU.equals("i7") || CPU.equals("i9") ||
-                               CPU.equals("Ryzen 3") || CPU.equals("Ryzen 5") || CPU.equals("Ryzen 7") || CPU.equals("Ryzen 9") ||
-                               CPU.equals("M1") || CPU.equals("M2") || CPU.equals("M3") ||
-                               CPU.equals("Pentium") || CPU.equals("Celeron") || CPU.equals("Xeon") ||
-                               CPU.equals("Athlon") || CPU.equals("FX");
-            
-            if (!isValidCPU) {
-                System.out.println("Invalid CPU!");
-            }
-        } while (!(CPU.equals("Intel Core i3") || CPU.equals("Intel Core i5") || 
-                  CPU.equals("Intel Core i7") || CPU.equals("Intel Core i9") || 
-                  CPU.equals("Intel Pentium") || CPU.equals("Intel Celeron") || 
-                  CPU.equals("Intel Xeon") || CPU.equals("AMD Ryzen 3") || 
-                  CPU.equals("AMD Ryzen 5") || CPU.equals("AMD Ryzen 7") || 
-                  CPU.equals("AMD Ryzen 9") || CPU.equals("AMD Athlon") || 
-                  CPU.equals("AMD FX") || CPU.equals("Apple M1") || 
-                  CPU.equals("Apple M2") || CPU.equals("Apple M3") ||
-                  // Model numbers only
-                  CPU.equals("i3") || CPU.equals("i5") || CPU.equals("i7") || CPU.equals("i9") ||
-                  CPU.equals("Ryzen 3") || CPU.equals("Ryzen 5") || CPU.equals("Ryzen 7") || CPU.equals("Ryzen 9") ||
-                  CPU.equals("M1") || CPU.equals("M2") || CPU.equals("M3") ||
-                  CPU.equals("Pentium") || CPU.equals("Celeron") || CPU.equals("Xeon") ||
-                  CPU.equals("Athlon") || CPU.equals("FX")));
+        System.out.print("Enter CPU:");
+        CPU = s.nextLine();
 
-        // Validation for RAM - allows only numbers
-        do {
-            System.out.print("Enter RAM:");
-            RAM = s.nextLine();
-            
-            // Check if input contains only numbers
-            if (!RAM.matches("\\d+")) {
-                System.out.println("Invalid RAM!");
-            }
-        } while (!RAM.matches("\\d+"));
+        System.out.print("Enter RAM:");
+        RAM = s.nextLine();
 
-        // Validation for Disk - allows only numbers
-        do {
-            System.out.print("Enter Disk:");
-            disk = s.nextLine();
-            
-            // Check if input contains only numbers
-            if (!disk.matches("\\d+")) {
-                System.out.println("Invalid Disk!");
-            }
-        } while (!disk.matches("\\d+"));
+        System.out.print("Enter Disk:");
+        disk = s.nextLine();
 
-        return new Computer(CPU, RAM, disk);
+        return new Computer(CPU,RAM,disk);
 
-    } // End of getComputerData
-
-} // End of ManageComputer class
+    } //End of getComputerData
+}
