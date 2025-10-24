@@ -1,16 +1,16 @@
 //Laptop computer: adds screen size to other Computer info
 
-public class Laptop { //Composition: Laptop is a Computer
-    private final String screenSize; //Make final to ensure it is set only in constructor
-    private Computer computer;
+public class Laptop { // Composition: Laptop is a Computer
+    private final String screenSize; // Make final to ensure it is set only in constructor
+    private final Computer computer;
 
     // String screenSize=null; -- original code
 
-    //Constructors
+    // Constructors
     // public Laptop() {} //No-arg constructor
 
     public Laptop(String CPU, String RAM, String disk, String screenSize) {
-        //Create Computer object
+        // Create Computer object
         this.computer = new Computer(CPU, RAM, disk);
 
         // Original code
@@ -18,21 +18,21 @@ public class Laptop { //Composition: Laptop is a Computer
         // this.RAM=RAM;
         // this.disk=disk;
 
-        //Only in Laptop subclass
-        this.screenSize=screenSize;
+        // Only in Laptop subclass
+        this.screenSize = screenSize;
     }
 
-    //Setter (hidden to ensure screen size is set only in constructor)
+    // Setter (hidden to ensure screen size is set only in constructor)
     // public void setScreenSize(String screenSize) {
-    //     this.screenSize=screenSize;
+    // this.screenSize=screenSize;
     // }
 
-    //Getter for Laptop attribute
+    // Getter for Laptop attribute
     public String getScreenSize() {
         return this.screenSize;
     }
 
-    //Getters for Computer attributes
+    // Getters for Computer attributes
     public String getCPU() {
         return this.computer.getCPU();
     }
@@ -45,9 +45,10 @@ public class Laptop { //Composition: Laptop is a Computer
         return this.computer.getDisk();
     }
 
-    //Return formatted version of data
+    // Return formatted version of data
     public String toString() {
-        return "Type:Laptop\tCPU:" + this.getCPU() + "\tRAM:" + this.getRAM() + "\tDisk:" + this.getDisk() + "\tScreen:" + this.screenSize;
+        return "Type:Laptop\tCPU:" + this.getCPU() + "\tRAM:" + this.getRAM() + "\tDisk:" + this.getDisk() + "\tScreen:"
+                + this.screenSize;
     }
-    
+
 }

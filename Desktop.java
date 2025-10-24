@@ -1,17 +1,17 @@
 //Desktop computer: adds GPU type
 
-public class Desktop { //Composition: Desktop is a Computer
-    private final String GPUType; //GPU type
-    private Computer computer; 
+public class Desktop { // Composition: Desktop is a Computer
+    private final String GPUType; // GPU type
+    private final Computer computer;
 
     public Desktop(String CPU, String RAM, String disk, String GPUType) {
-        //Create Computer object
+        // Create Computer object
         this.computer = new Computer(CPU, RAM, disk);
         // only in Desktop subclass
-        this.GPUType=GPUType;
+        this.GPUType = GPUType;
     }
 
-    //Getters for Computer attributes
+    // Getters for Computer attributes
     public String getGPUType() {
         return this.GPUType;
     }
@@ -28,9 +28,10 @@ public class Desktop { //Composition: Desktop is a Computer
         return this.computer.getDisk();
     }
 
-    //Return formatted version of data
+    // Return formatted version of data
     public String toString() {
-        return "Type:Desktop\tCPU:" + this.getCPU() + "\tRAM:" + this.getRAM() + "\tDisk:" + this.getDisk() + "\tGPU:" + this.GPUType;
+        return "Type:Desktop\tCPU:" + this.getCPU() + "\tRAM:" + this.getRAM() + "\tDisk:" + this.getDisk() + "\tGPU:"
+                + this.GPUType;
     }
 
 }
