@@ -115,6 +115,11 @@ public class ManageComputers {
 
                 System.out.print("Enter screen size:");
                 String screenSize = s.nextLine();
+                while (!isValidScreenSize(screenSize)) {
+                    System.out.println("Invalid screen size.");
+                    System.out.print("Enter screen size:");
+                    screenSize = s.nextLine();
+                }
 
                 //Add new Laptop to ArrayList in main() method
                 computers.add(new Laptop(tempComputer.getCPU(),tempComputer.getRAM(),tempComputer.getDisk(),screenSize)); 
@@ -129,6 +134,11 @@ public class ManageComputers {
 
                 System.out.print("Enter GPU:");
                 String GPUType = s.nextLine();
+                while (!isValidGPU(GPUType)) {
+                    System.out.println("Invalid GPU.");
+                    System.out.print("Enter GPU:");
+                    GPUType = s.nextLine();
+                }
 
                 //Add new Desktop to ArrayList in main() method
                 computers.add(new Desktop(tempComputer.getCPU(),tempComputer.getRAM(),tempComputer.getDisk(),GPUType)); 
@@ -200,6 +210,11 @@ public class ManageComputers {
 
                 System.out.print("Enter screen size:");
                 String screenSize = s.nextLine();
+                while (!isValidScreenSize(screenSize)) {
+                    System.out.println("Invalid screen size.");
+                    System.out.print("Enter screen size:");
+                    screenSize = s.nextLine();
+                }
 
                 // Create a new Laptop object with updated info
                 Laptop updatedLaptop = new Laptop(
@@ -221,6 +236,11 @@ public class ManageComputers {
 
                 System.out.print("Enter GPU:");
                 String GPUType = s.nextLine();
+                while (!isValidGPU(GPUType)) {
+                    System.out.println("Invalid GPU.");
+                    System.out.print("Enter GPU:");
+                    GPUType = s.nextLine();
+                }
 
                 // Create a new Desktop object with updated info
                 Desktop updatedDesktop = new Desktop(
@@ -250,14 +270,71 @@ public class ManageComputers {
 
         System.out.print("Enter CPU:");
         CPU = s.nextLine();
+        while (!isValidCPU(CPU)) {
+            System.out.println("Invalid CPU.");
+            System.out.print("Enter CPU:");
+            CPU = s.nextLine();
+        }
 
         System.out.print("Enter RAM:");
         RAM = s.nextLine();
+        while (!isValidRAM(RAM)) {
+            System.out.println("Invalid RAM.");
+            System.out.print("Enter RAM:");
+            RAM = s.nextLine();
+        }
 
         System.out.print("Enter Disk:");
         disk = s.nextLine();
+        while (!isValidDisk(disk)) {
+            System.out.println("Invalid disk.");
+            System.out.print("Enter Disk:");
+            disk = s.nextLine();
+        }
 
         return new Computer(CPU,RAM,disk);
 
     } //End of getComputerData
+
+    // -----------------------------
+    // Input validation methods
+    private static boolean isValidCPU(String cpu) {
+        if (cpu == null || cpu.trim().isEmpty()) {
+            return false;
+        }
+        // Just check that it's not empty and has reasonable length
+        return cpu.trim().length() >= 3 && cpu.trim().length() <= 50;
+    }
+
+    private static boolean isValidRAM(String ram) {
+        if (ram == null || ram.trim().isEmpty()) {
+            return false;
+        }
+        // Just check that it's not empty and has reasonable length
+        return ram.trim().length() >= 2 && ram.trim().length() <= 20;
+    }
+
+    private static boolean isValidDisk(String disk) {
+        if (disk == null || disk.trim().isEmpty()) {
+            return false;
+        }
+        // Just check that it's not empty and has reasonable length
+        return disk.trim().length() >= 3 && disk.trim().length() <= 30;
+    }
+
+    private static boolean isValidScreenSize(String screenSize) {
+        if (screenSize == null || screenSize.trim().isEmpty()) {
+            return false;
+        }
+        // Just check that it's not empty and has reasonable length
+        return screenSize.trim().length() >= 2 && screenSize.trim().length() <= 20;
+    }
+
+    private static boolean isValidGPU(String gpu) {
+        if (gpu == null || gpu.trim().isEmpty()) {
+            return false;
+        }
+        // Just check that it's not empty and has reasonable length
+        return gpu.trim().length() >= 3 && gpu.trim().length() <= 30;
+    }
 }
